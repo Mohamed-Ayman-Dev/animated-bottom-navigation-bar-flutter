@@ -14,12 +14,20 @@ class CircularNotchedAndCorneredRectangleClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final Rect? button = geometry.value.floatingActionButtonArea?.translate(
-      0.0,
-      geometry.value.bottomNavigationBarTop! * -1.0,
-    );
+    try {
+      final Rect? button = geometry.value.floatingActionButtonArea?.translate(
+        0.0,
+        geometry.value.bottomNavigationBarTop! * -1.0,
+      );
 
-    return shape.getOuterPath(Offset.zero & size, button?.inflate(notchMargin));
+      return shape.getOuterPath(
+        Offset.zero & size,
+        button?.inflate(notchMargin),
+      );
+    } catch (e) {
+      // Geometry not ready yet — fallback without notch
+      return shape.getOuterPath(Offset.zero & size, null);
+    }
   }
 
   @override
